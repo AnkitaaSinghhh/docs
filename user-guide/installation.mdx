@@ -1,0 +1,318 @@
+---
+title: "Installation"
+description: "Set up Mindlap Social Scheduler on your system"
+icon: "download"
+---
+
+## Prerequisites
+
+Before installing Mindlap Social Scheduler, ensure you have:
+
+- **Node.js** 18 or higher
+- **npm** or **yarn** package manager
+- **PostgreSQL** (for production) or SQLite will be used automatically for development
+- **OpenAI API key** for AI features
+- Social media platform API credentials (Twitter, LinkedIn, Instagram, YouTube)
+
+## Installation Methods
+
+<Tabs>
+  <Tab title="Docker (Recommended)">
+    ### Using Docker
+
+    The easiest way to run Mindlap Social Scheduler is with Docker.
+
+    <Steps>
+      <Step title="Clone the repository">
+        ```bash
+        git clone https://github.com/AnkitaaSinghhh/MindlapSocialScheduler.git
+        cd MindlapSocialScheduler
+        ```
+      </Step>
+
+      <Step title="Configure environment">
+        Create a `.env` file in the root directory:
+        ```bash
+        cp .env.example .env
+        ```
+        Edit `.env` with your configuration (see Environment Variables below).
+      </Step>
+
+      <Step title="Build and run with Docker">
+        ```bash
+        docker build -t mindlap-scheduler .
+        docker run -p 5000:5000 --env-file .env mindlap-scheduler
+        ```
+      </Step>
+
+      <Step title="Verify installation">
+        Visit `http://localhost:5000/health` to check if the server is running.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Node.js">
+    ### Manual Installation with Node.js
+
+    <Steps>
+      <Step title="Clone the repository">
+        ```bash
+        git clone https://github.com/AnkitaaSinghhh/MindlapSocialScheduler.git
+        cd MindlapSocialScheduler
+        ```
+      </Step>
+
+      <Step title="Install dependencies">
+        ```bash
+        npm install
+        ```
+      </Step>
+
+      <Step title="Configure environment">
+        Create a `.env` file:
+        ```bash
+        cp .env.example .env
+        ```
+        Edit the `.env` file with your credentials.
+      </Step>
+
+      <Step title="Run database migrations">
+        ```bash
+        npm run db:migrate
+        ```
+      </Step>
+
+      <Step title="Seed initial data">
+        ```bash
+        npm run db:seed
+        ```
+      </Step>
+
+      <Step title="Start the server">
+        For development:
+        ```bash
+        npm run dev
+        ```
+
+        For production:
+        ```bash
+        npm start
+        ```
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Environment Variables
+
+Configure your `.env` file with the following variables:
+
+### Server Configuration
+
+```bash
+PORT=5000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+```
+
+### Database Configuration
+
+<Tabs>
+  <Tab title="Development (SQLite)">
+    SQLite is used automatically in development mode. No additional configuration needed.
+  </Tab>
+
+  <Tab title="Production (PostgreSQL)">
+    ```bash
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_NAME=mindlap_scheduler
+    DB_USER=postgres
+    DB_PASSWORD=your_password
+    ```
+  </Tab>
+</Tabs>
+
+### Authentication
+
+```bash
+JWT_SECRET=your-super-secret-jwt-key-change-this
+JWT_EXPIRES_IN=7d
+```
+
+<Warning>
+  **Security**: Always use a strong, unique JWT secret in production. Never commit your `.env` file to version control.
+</Warning>
+
+### OpenAI Configuration
+
+```bash
+OPENAI_API_KEY=sk-proj-your-api-key-here
+```
+
+<Info>
+  Get your OpenAI API key from [platform.openai.com](https://platform.openai.com/api-keys)
+</Info>
+
+### Social Media Platform Credentials
+
+<AccordionGroup>
+  <Accordion title="Twitter API">
+    ```bash
+    TWITTER_API_KEY=your_key
+    TWITTER_API_SECRET=your_secret
+    TWITTER_ACCESS_TOKEN=your_token
+    TWITTER_ACCESS_SECRET=your_secret
+    ```
+    Get credentials from [Twitter Developer Portal](https://developer.twitter.com/)
+  </Accordion>
+
+  <Accordion title="LinkedIn API">
+    ```bash
+    LINKEDIN_CLIENT_ID=your_client_id
+    LINKEDIN_CLIENT_SECRET=your_client_secret
+    ```
+    Get credentials from [LinkedIn Developers](https://www.linkedin.com/developers/)
+  </Accordion>
+
+  <Accordion title="YouTube API">
+    ```bash
+    YOUTUBE_API_KEY=your_api_key
+    GOOGLE_CLIENT_ID=your_client_id
+    GOOGLE_CLIENT_SECRET=your_client_secret
+    ```
+    Get credentials from [Google Cloud Console](https://console.cloud.google.com/)
+  </Accordion>
+
+  <Accordion title="Instagram API">
+    ```bash
+    INSTAGRAM_ACCESS_TOKEN=your_access_token
+    ```
+    Get credentials from [Meta for Developers](https://developers.facebook.com/)
+  </Accordion>
+</AccordionGroup>
+
+### File Upload Configuration
+
+```bash
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=uploads/
+```
+
+### Analytics
+
+```bash
+ENABLE_ANALYTICS=true
+```
+
+## Database Setup
+
+### Running Migrations
+
+Migrations create the database schema:
+
+```bash
+npm run db:migrate
+```
+
+This creates the following tables:
+- `users` - User accounts
+- `social_accounts` - Connected social media accounts
+- `posts` - Content and metadata
+- `content_templates` - Reusable templates
+- `schedules` - Scheduling information
+- `analytics` - Performance metrics
+- `approval_workflows` - Team collaboration
+
+### Seeding Initial Data
+
+The seed command creates default admin and editor users:
+
+```bash
+npm run db:seed
+```
+
+**Default Credentials:**
+- **Admin**: admin@mindlap.ai / admin123
+- **Editor**: editor@mindlap.ai / admin123
+
+<Warning>
+  Change these default passwords immediately in production!
+</Warning>
+
+## Verify Installation
+
+### Health Check
+
+Visit the health check endpoint:
+
+```bash
+curl http://localhost:5000/health
+```
+
+Expected response:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+```
+
+### Test OpenAI Connection
+
+Run the test script:
+
+```bash
+node test_openai.js
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Database connection errors">
+    **Issue**: Cannot connect to database
+
+    **Solutions**:
+    - For PostgreSQL, ensure the database exists: `createdb mindlap_scheduler`
+    - Check your database credentials in `.env`
+    - Verify PostgreSQL is running: `pg_isready`
+    - For SQLite, ensure write permissions in the project directory
+  </Accordion>
+
+  <Accordion title="OpenAI API errors">
+    **Issue**: AI features not working
+
+    **Solutions**:
+    - Verify your OpenAI API key is correct
+    - Check your OpenAI account has credits
+    - Test with: `node test_openai.js`
+  </Accordion>
+
+  <Accordion title="Port already in use">
+    **Issue**: Error: listen EADDRINUSE :::5000
+
+    **Solutions**:
+    - Change the PORT in `.env` to a different value
+    - Kill the process using port 5000: `lsof -ti:5000 | xargs kill -9`
+  </Accordion>
+
+  <Accordion title="Migration errors">
+    **Issue**: Errors running migrations
+
+    **Solutions**:
+    - Reset the database: `npm run db:rollback`
+    - Re-run migrations: `npm run db:migrate`
+    - Check database permissions
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/user-guide/authentication">
+    Set up your account and connect social media platforms
+  </Card>
+  <Card title="Create Your First Post" icon="pen" href="/user-guide/creating-posts">
+    Start creating and scheduling content
+  </Card>
+</CardGroup>

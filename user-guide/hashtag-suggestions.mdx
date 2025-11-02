@@ -1,0 +1,79 @@
+---
+title: "Hashtag Suggestions"
+description: "AI-powered hashtag recommendations for better reach"
+icon: "hashtag"
+---
+
+## AI Hashtag Generation
+
+Get intelligent hashtag suggestions for your content:
+
+```bash
+curl -X POST http://localhost:5000/api/ai/generate/hashtags \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "Announcing our new AI voice agent platform",
+    "platform": "twitter",
+    "industry": "technology",
+    "count": 10
+  }'
+```
+
+**Response:**
+```json
+{
+  "suggested": ["#AI", "#VoiceAI", "#Technology"],
+  "trending": ["#VoiceAutomation", "#ConversationalAI"],
+  "branded": ["#MindlapAI", "#VoiceAgents"],
+  "total_count": 10
+}
+```
+
+## Hashtag Categories
+
+Browse hashtags by category:
+
+```bash
+curl -X GET http://localhost:5000/api/hashtags/categories \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Available Categories:**
+- Technology
+- Business
+- Marketing
+- AI & Machine Learning
+- Voice Technology
+- Customer Service
+- Automation
+
+## Search Hashtags
+
+```bash
+curl -X GET "http://localhost:5000/api/hashtags/search?keyword=voice" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Trending Hashtags
+
+Get currently trending hashtags:
+
+```bash
+curl -X GET http://localhost:5000/api/hashtags/trending \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Twitter" icon="twitter">
+    1-2 highly relevant hashtags
+  </Card>
+  <Card title="Instagram" icon="instagram">
+    5-10 mix of popular and niche tags
+  </Card>
+  <Card title="LinkedIn" icon="linkedin">
+    3-5 professional hashtags
+  </Card>
+</CardGroup>

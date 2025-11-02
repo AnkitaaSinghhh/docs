@@ -1,0 +1,64 @@
+---
+title: "Schedules API"
+description: "Schedule posts for automatic publishing"
+icon: "calendar"
+---
+
+## Create Schedule
+
+<api method="POST" path="/api/schedules" auth="bearer" />
+
+Schedule a post for automatic publishing.
+
+### Request Body
+
+<ParamField path="post_id" type="number" required>
+  ID of the post to schedule
+</ParamField>
+
+<ParamField path="schedule_type" type="string" required>
+  Type: `one_time`, `recurring`, `bulk`
+</ParamField>
+
+<ParamField path="scheduled_at" type="datetime" required>
+  Publication time (ISO 8601)
+</ParamField>
+
+<ParamField path="recurrence_rule" type="object">
+  For recurring schedules: `{ frequency, interval, end_date }`
+</ParamField>
+
+### Example
+
+```bash
+curl -X POST http://localhost:5000/api/schedules \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "post_id": 42,
+    "schedule_type": "one_time",
+    "scheduled_at": "2024-01-25T14:00:00Z"
+  }'
+```
+
+## Bulk Schedule
+
+<api method="POST" path="/api/schedules/bulk" auth="bearer" />
+
+Schedule multiple posts at once.
+
+## Get All Schedules
+
+<api method="GET" path="/api/schedules" auth="bearer" />
+
+## Get Schedule Stats
+
+<api method="GET" path="/api/schedules/stats" auth="bearer" />
+
+## Update Schedule
+
+<api method="PUT" path="/api/schedules/:id" auth="bearer" />
+
+## Cancel Schedule
+
+<api method="DELETE" path="/api/schedules/:id" auth="bearer" />

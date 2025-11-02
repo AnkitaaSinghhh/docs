@@ -1,0 +1,108 @@
+---
+title: "Analytics Overview"
+description: "Track and analyze your social media performance"
+icon: "chart-mixed"
+---
+
+## Dashboard Analytics
+
+Get a comprehensive overview of your social media performance:
+
+```bash
+curl -X GET http://localhost:5000/api/analytics/overview \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "total_posts": 127,
+  "total_impressions": 45230,
+  "total_engagement": 3421,
+  "engagement_rate": 7.56,
+  "top_platform": "linkedin",
+  "platform_breakdown": {
+    "twitter": { "posts": 45, "engagement": 1234 },
+    "linkedin": { "posts": 52, "engagement": 1876 },
+    "instagram": { "posts": 30, "engagement": 311 }
+  }
+}
+```
+
+## Metrics Tracked
+
+<CardGroup cols={2}>
+  <Card title="Impressions" icon="eye">
+    Total views of your posts
+  </Card>
+  <Card title="Likes" icon="heart">
+    Number of likes received
+  </Card>
+  <Card title="Shares" icon="share">
+    Times your content was shared
+  </Card>
+  <Card title="Comments" icon="comment">
+    Engagement through comments
+  </Card>
+  <Card title="Clicks" icon="mouse-pointer">
+    Link clicks and interactions
+  </Card>
+  <Card title="Engagement Rate" icon="percentage">
+    (Likes + Shares + Comments) / Impressions
+  </Card>
+</CardGroup>
+
+## Post Performance
+
+View individual post analytics:
+
+```bash
+curl -X GET http://localhost:5000/api/analytics/posts \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Engagement Trends
+
+Analyze trends over time:
+
+```bash
+curl -X GET "http://localhost:5000/api/analytics/trends?period=30d" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Supported Periods:**
+- `7d` - Last 7 days
+- `30d` - Last 30 days
+- `90d` - Last 90 days
+
+## Best Posting Times
+
+Discover when your audience is most active:
+
+```bash
+curl -X GET http://localhost:5000/api/analytics/best-times \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "best_hours": [9, 12, 17],
+  "best_days": ["tuesday", "wednesday", "thursday"],
+  "timezone": "UTC",
+  "based_on_posts": 127
+}
+```
+
+## Refresh Analytics
+
+Update metrics for a specific post:
+
+```bash
+curl -X POST http://localhost:5000/api/analytics/refresh/42 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+<Info>
+  Analytics are automatically refreshed periodically. Manual refresh is useful for recent posts.
+</Info>

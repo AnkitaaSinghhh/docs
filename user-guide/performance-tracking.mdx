@@ -1,0 +1,45 @@
+---
+title: "Performance Tracking"
+description: "Detailed performance tracking and optimization"
+icon: "chart-line"
+---
+
+## Track Individual Posts
+
+Monitor the performance of specific posts:
+
+```bash
+curl -X GET "http://localhost:5000/api/analytics/posts?post_id=42" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "post_id": 42,
+  "platforms": {
+    "twitter": {
+      "impressions": 1250,
+      "likes": 45,
+      "shares": 12,
+      "comments": 8,
+      "engagement_rate": 5.2
+    },
+    "linkedin": {
+      "impressions": 2100,
+      "likes": 78,
+      "shares": 23,
+      "comments": 15,
+      "engagement_rate": 5.52
+    }
+  }
+}
+```
+
+## Compare Performance
+
+Identify your best-performing content types, hashtags, and posting times.
+
+## Export Analytics
+
+Download analytics data for external analysis and reporting.

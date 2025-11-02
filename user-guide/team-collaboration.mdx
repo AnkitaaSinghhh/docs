@@ -1,0 +1,43 @@
+---
+title: "Team Collaboration"
+description: "Approval workflows and team coordination"
+icon: "users"
+---
+
+## Approval Workflows
+
+Enable content review before publishing with built-in approval workflows.
+
+## Requesting Approval
+
+Editors can request approval from admins:
+
+```bash
+curl -X POST http://localhost:5000/api/approvals/request \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "post_id": 42,
+    "request_message": "Please review this product launch post"
+  }'
+```
+
+## Responding to Approval Requests
+
+Admins can approve or reject:
+
+```bash
+curl -X PUT http://localhost:5000/api/approvals/1/respond \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "approved",
+    "response_message": "Looks great! Approved for publishing."
+  }'
+```
+
+## User Roles
+
+- **Admin**: Approve content, manage team
+- **Editor**: Create and schedule posts
+- **Viewer**: Read-only access

@@ -1,0 +1,377 @@
+---
+title: "Creating Posts"
+description: "Learn how to create, edit, and publish social media posts"
+icon: "pen"
+---
+
+## Overview
+
+Mindlap Social Scheduler provides multiple ways to create social media posts:
+
+1. **Manual Creation** - Write posts from scratch
+2. **AI Generation** - Let AI create content for you
+3. **Template-Based** - Use pre-built templates with variable substitution
+
+## Creating a Post Manually
+
+### Basic Post Creation
+
+<CodeGroup>
+```bash cURL
+curl -X POST http://localhost:5000/api/posts \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Product Launch Announcement",
+    "content": "Excited to announce our new voice AI feature! 🎉\n\nBuild intelligent voice agents in minutes without writing code.\n\n#AI #VoiceAI #NoCode",
+    "platforms": ["twitter", "linkedin"],
+    "content_type": "text",
+    "hashtags": ["#AI", "#VoiceAI", "#NoCode"],
+    "scheduled_at": "2024-01-20T14:00:00Z"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:5000/api/posts', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    title: 'Product Launch Announcement',
+    content: 'Excited to announce our new voice AI feature! 🎉...',
+    platforms: ['twitter', 'linkedin'],
+    content_type: 'text',
+    hashtags: ['#AI', '#VoiceAI', '#NoCode'],
+    scheduled_at: '2024-01-20T14:00:00Z'
+  })
+});
+
+const post = await response.json();
+```
+</CodeGroup>
+
+### Post Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | string | No | Post title (internal reference) |
+| `content` | string | Yes | The actual post content |
+| `platforms` | array | Yes | Target platforms: `twitter`, `linkedin`, `instagram`, `youtube` |
+| `content_type` | string | No | Type: `text`, `image`, `video`, `link`, `audio` (default: `text`) |
+| `hashtags` | array | No | Array of hashtags to include |
+| `mentions` | array | No | Array of user mentions |
+| `scheduled_at` | datetime | No | When to publish (omit for draft) |
+| `media_files` | array | No | Uploaded media file paths |
+| `notes` | string | No | Internal notes/instructions |
+
+## Uploading Media
+
+Posts can include images, videos, and other media files.
+
+<Steps>
+  <Step title="Prepare the media file">
+    Supported formats:
+    - **Images**: JPG, PNG, GIF, WebP
+    - **Videos**: MP4, MOV, AVI
+    - **Audio**: MP3, WAV
+
+    Maximum file size: **1GB per file**
+  </Step>
+
+  <Step title="Upload with multipart/form-data">
+    ```bash
+    curl -X POST http://localhost:5000/api/posts \
+      -H "Authorization: Bearer YOUR_TOKEN" \
+      -F "title=Check out our new feature!" \
+      -F "content=Amazing voice AI capabilities..." \
+      -F "platforms[]=twitter" \
+      -F "platforms[]=instagram" \
+      -F "content_type=image" \
+      -F "media=@/path/to/image.jpg"
+    ```
+  </Step>
+
+  <Step title="Verify media upload">
+    The response includes `media_files` array with uploaded file paths:
+    ```json
+    {
+      "id": 42,
+      "media_files": [
+        "uploads/1705843200000-image.jpg"
+      ]
+    }
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+  Media files are stored in the `uploads/` directory. Ensure this directory has proper write permissions and sufficient disk space.
+</Warning>
+
+## Content Types
+
+Different content types optimize posts for specific media:
+
+<Tabs>
+  <Tab title="Text">
+    ### Text Posts
+
+    Simple text-only posts, ideal for Twitter and LinkedIn.
+
+    ```json
+    {
+      "content_type": "text",
+      "content": "Your text content here...",
+      "platforms": ["twitter", "linkedin"]
+    }
+    ```
+
+    **Best For:** Announcements, questions, quotes, tips
+  </Tab>
+
+  <Tab title="Image">
+    ### Image Posts
+
+    Posts with one or more images.
+
+    ```json
+    {
+      "content_type": "image",
+      "content": "Caption text...",
+      "platforms": ["instagram", "twitter"],
+      "media_files": ["uploads/photo1.jpg", "uploads/photo2.jpg"]
+    }
+    ```
+
+    **Best For:** Instagram, Pinterest-style content, infographics
+  </Tab>
+
+  <Tab title="Video">
+    ### Video Posts
+
+    Video content for YouTube, Instagram Reels, TikTok.
+
+    ```json
+    {
+      "content_type": "video",
+      "content": "Video description...",
+      "platforms": ["youtube", "instagram"],
+      "media_files": ["uploads/demo-video.mp4"]
+    }
+    ```
+
+    **Best For:** Tutorials, demos, vlogs
+  </Tab>
+
+  <Tab title="Link">
+    ### Link Posts
+
+    Share articles, blog posts, or external content.
+
+    ```json
+    {
+      "content_type": "link",
+      "content": "Check out our latest blog post about voice AI!\n\nhttps://blog.mindlap.ai/voice-agents",
+      "platforms": ["linkedin", "twitter"]
+    }
+    ```
+
+    **Best For:** Blog posts, news articles, resources
+  </Tab>
+</Tabs>
+
+## Managing Posts
+
+### Get All Your Posts
+
+```bash
+curl -X GET http://localhost:5000/api/posts \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Product Launch",
+      "content": "Excited to announce...",
+      "status": "scheduled",
+      "scheduled_at": "2024-01-20T14:00:00Z",
+      "platforms": ["twitter", "linkedin"],
+      "created_at": "2024-01-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+### Get Single Post
+
+```bash
+curl -X GET http://localhost:5000/api/posts/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Update a Post
+
+<Note>
+  You can only update posts with status `draft` or `scheduled`. Published posts cannot be edited.
+</Note>
+
+```bash
+curl -X PUT http://localhost:5000/api/posts/1 \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "Updated content...",
+    "scheduled_at": "2024-01-21T15:00:00Z"
+  }'
+```
+
+### Delete a Post
+
+```bash
+curl -X DELETE http://localhost:5000/api/posts/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## Post Status Workflow
+
+Posts progress through different statuses:
+
+<Steps>
+  <Step title="Draft">
+    **Status:** `draft`
+
+    Initial state. Post is saved but not scheduled.
+
+    - Can be edited freely
+    - Not visible to public
+    - Can schedule for later
+  </Step>
+
+  <Step title="Scheduled">
+    **Status:** `scheduled`
+
+    Post has a `scheduled_at` time and will publish automatically.
+
+    - Waiting for scheduled time
+    - Can still be edited or cancelled
+    - Will transition to `published` at scheduled time
+  </Step>
+
+  <Step title="Published">
+    **Status:** `published`
+
+    Post has been successfully published to social platforms.
+
+    - Visible on social media
+    - Cannot be edited (edit on platform instead)
+    - Analytics available
+  </Step>
+
+  <Step title="Failed">
+    **Status:** `failed`
+
+    Publishing failed due to an error.
+
+    - Check error message for details
+    - Can retry publishing
+    - Common issues: API limits, invalid credentials
+  </Step>
+</Steps>
+
+## Publish Immediately
+
+Skip scheduling and publish a post right away:
+
+```bash
+curl -X POST http://localhost:5000/api/posts/1/publish \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+This publishes the post to all specified platforms immediately.
+
+## Platform-Specific Considerations
+
+<AccordionGroup>
+  <Accordion title="Twitter">
+    - Character limit: 280 characters (including hashtags and mentions)
+    - Media: Up to 4 images or 1 video per tweet
+    - Video: Max 512MB, up to 2:20 minutes
+    - Use Twitter-specific features: threads, polls (future feature)
+  </Accordion>
+
+  <Accordion title="LinkedIn">
+    - Character limit: 3,000 characters
+    - Professional tone recommended
+    - Rich media support: images, videos, documents
+    - Best times: Weekdays during business hours
+  </Accordion>
+
+  <Accordion title="Instagram">
+    - Requires at least one image or video
+    - Square images (1:1) or portrait (4:5) work best
+    - Caption limit: 2,200 characters
+    - Use relevant hashtags (up to 30, but 5-10 recommended)
+  </Accordion>
+
+  <Accordion title="YouTube">
+    - Video content required
+    - Title: Up to 100 characters
+    - Description: Up to 5,000 characters
+    - Longer upload times for video processing
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Engage Your Audience" icon="users">
+    - Ask questions
+    - Include call-to-actions
+    - Respond to comments
+    - Use conversational tone
+  </Card>
+
+  <Card title="Optimize for Each Platform" icon="sliders">
+    - Tailor content for each platform
+    - Respect character limits
+    - Use platform-specific features
+    - Optimize image sizes
+  </Card>
+
+  <Card title="Use Hashtags Wisely" icon="hashtag">
+    - 1-2 hashtags for Twitter
+    - 5-10 for Instagram
+    - 3-5 for LinkedIn
+    - Research trending hashtags
+  </Card>
+
+  <Card title="Include Media" icon="image">
+    - Posts with images get 2x engagement
+    - Videos perform even better
+    - Ensure high quality
+    - Optimize file sizes
+  </Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Schedule Posts" icon="calendar" href="/user-guide/scheduling">
+    Learn about scheduling options and automation
+  </Card>
+  <Card title="Use AI Generation" icon="sparkles" href="/user-guide/ai-content-generation">
+    Generate posts with AI assistance
+  </Card>
+  <Card title="Use Templates" icon="file-lines" href="/user-guide/templates">
+    Create reusable content templates
+  </Card>
+  <Card title="View Analytics" icon="chart-line" href="/user-guide/analytics-overview">
+    Track post performance
+  </Card>
+</CardGroup>

@@ -1,0 +1,91 @@
+---
+title: "AI Endpoints"
+description: "AI-powered content generation and optimization"
+icon: "sparkles"
+---
+
+## Generate Post
+
+<api method="POST" path="/api/ai/generate/post" auth="bearer" />
+
+Generate a social media post using AI.
+
+### Request Body
+
+<ParamField path="prompt" type="string" required>
+  Content idea or topic
+</ParamField>
+
+<ParamField path="platform" type="string" default="twitter">
+  Target platform
+</ParamField>
+
+<ParamField path="tone" type="string" default="professional">
+  Writing tone: `professional`, `casual`, `friendly`, etc.
+</ParamField>
+
+<ParamField path="audience" type="string">
+  Target audience description
+</ParamField>
+
+<ParamField path="contentType" type="string" default="general">
+  Type: `general`, `educational`, `promotional`, `engagement`
+</ParamField>
+
+<ParamField path="includeHashtags" type="boolean" default="true">
+  Include hashtag suggestions
+</ParamField>
+
+<ParamField path="maxLength" type="number">
+  Maximum character count
+</ParamField>
+
+### Example
+
+```bash
+curl -X POST http://localhost:5000/api/ai/generate/post \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Announce new AI voice agent feature",
+    "platform": "linkedin",
+    "tone": "professional",
+    "includeHashtags": true
+  }'
+```
+
+## Improve Content
+
+<api method="POST" path="/api/ai/improve/content" auth="bearer" />
+
+Enhance existing content for better engagement.
+
+## Generate Template
+
+<api method="POST" path="/api/ai/generate/template" auth="bearer" />
+
+Generate a reusable template with AI.
+
+## Generate Hashtags
+
+<api method="POST" path="/api/ai/generate/hashtags" auth="bearer" />
+
+Get AI-powered hashtag suggestions.
+
+## Optimize Scheduling
+
+<api method="POST" path="/api/ai/optimize/scheduling" auth="bearer" />
+
+Get AI recommendations for optimal posting times.
+
+## Generate Bulk Posts
+
+<api method="POST" path="/api/ai/generate/bulk-posts" auth="bearer" />
+
+Generate multiple posts for a campaign.
+
+## Smart Schedule
+
+<api method="POST" path="/api/ai/smart-schedule" auth="bearer" />
+
+AI-optimized scheduling for multiple posts.

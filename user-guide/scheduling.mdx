@@ -1,0 +1,163 @@
+---
+title: "Scheduling Posts"
+description: "Schedule posts with one-time, recurring, and bulk scheduling options"
+icon: "calendar-check"
+---
+
+## Scheduling Options
+
+Mindlap Social Scheduler offers flexible scheduling to automate your social media presence.
+
+<CardGroup cols={3}>
+  <Card title="One-Time" icon="calendar-day">
+    Schedule a single post for a specific date and time
+  </Card>
+  <Card title="Recurring" icon="arrows-rotate">
+    Set up posts that repeat on a schedule (daily, weekly, etc.)
+  </Card>
+  <Card title="Bulk" icon="layer-group">
+    Schedule multiple posts at once with patterns
+  </Card>
+</CardGroup>
+
+## One-Time Scheduling
+
+Schedule a post to publish once at a specific time.
+
+```bash
+curl -X POST http://localhost:5000/api/schedules \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "post_id": 42,
+    "schedule_type": "one_time",
+    "scheduled_at": "2024-01-25T14:00:00Z"
+  }'
+```
+
+## Recurring Scheduling
+
+Set up posts that repeat automatically.
+
+```bash
+curl -X POST http://localhost:5000/api/schedules \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "post_id": 42,
+    "schedule_type": "recurring",
+    "scheduled_at": "2024-01-20T09:00:00Z",
+    "recurrence_rule": {
+      "frequency": "daily",
+      "interval": 1,
+      "end_date": "2024-02-20T09:00:00Z"
+    }
+  }'
+```
+
+### Recurrence Options
+
+- **daily**: Every day
+- **weekly**: Every week on specific days
+- **monthly**: Specific day(s) of the month
+- **custom**: Use cron expressions for advanced patterns
+
+## Bulk Scheduling
+
+Schedule multiple posts efficiently:
+
+```bash
+curl -X POST http://localhost:5000/api/schedules/bulk \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "posts": [
+      { "post_id": 1, "scheduled_at": "2024-01-20T09:00:00Z" },
+      { "post_id": 2, "scheduled_at": "2024-01-20T14:00:00Z" },
+      { "post_id": 3, "scheduled_at": "2024-01-21T09:00:00Z" }
+    ]
+  }'
+```
+
+## Managing Schedules
+
+### View All Schedules
+
+```bash
+curl -X GET http://localhost:5000/api/schedules \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Update Schedule
+
+```bash
+curl -X PUT http://localhost:5000/api/schedules/1 \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "scheduled_at": "2024-01-25T16:00:00Z"
+  }'
+```
+
+### Cancel Schedule
+
+```bash
+curl -X DELETE http://localhost:5000/api/schedules/1 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## How Scheduling Works
+
+The scheduler uses **node-cron** to automatically publish posts:
+
+<Steps>
+  <Step title="Create Schedule">
+    You create a schedule with a `scheduled_at` time
+  </Step>
+  <Step title="Cron Job Monitors">
+    Every minute, the scheduler checks for pending posts
+  </Step>
+  <Step title="Automatic Publishing">
+    When `scheduled_at` time arrives, post is published to all platforms
+  </Step>
+  <Step title="Status Updated">
+    Post status changes from `scheduled` to `published` or `failed`
+  </Step>
+</Steps>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Optimal Posting Times">
+    **General Guidelines:**
+    - LinkedIn: Weekdays 7-9 AM, 12 PM, 5-6 PM
+    - Twitter: Weekdays 8 AM - 4 PM
+    - Instagram: Weekdays 11 AM - 1 PM
+    - Use AI scheduling optimization for personalized recommendations
+  </Accordion>
+
+  <Accordion title="Timezone Considerations">
+    - All times in the API are UTC
+    - Convert local times to UTC before scheduling
+    - Consider your audience's timezone
+    - Use AI smart scheduling for automatic optimization
+  </Accordion>
+
+  <Accordion title="Frequency">
+    - Twitter: 3-5 times per day
+    - LinkedIn: 1-2 times per day
+    - Instagram: 1-2 times per day
+    - Don't overwhelm your audience
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="AI Smart Scheduling" icon="sparkles" href="/user-guide/ai-optimization">
+    Use AI to optimize posting times
+  </Card>
+  <Card title="Analytics" icon="chart-line" href="/user-guide/analytics-overview">
+    Track performance and adjust strategy
+  </Card>
+</CardGroup>

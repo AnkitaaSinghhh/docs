@@ -1,0 +1,130 @@
+---
+title: "Content Templates"
+description: "Create and use reusable content templates with variable substitution"
+icon: "file-lines"
+---
+
+## Overview
+
+Content templates allow you to create reusable post structures with variable placeholders. Perfect for recurring content types like product launches, customer stories, or weekly tips.
+
+## Template Structure
+
+Templates use `{{variable}}` syntax for dynamic content:
+
+```
+Excited to announce {{product_name}}! 🎉
+
+{{product_description}}
+
+Key features:
+{{feature_list}}
+
+Learn more: {{link}}
+
+#{{category}} #MindlapAI
+```
+
+## Creating Templates
+
+```bash
+curl -X POST http://localhost:5000/api/templates \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Product Launch Template",
+    "description": "Template for announcing new products",
+    "content_template": "Excited to announce {{product_name}}!...",
+    "category": "launch",
+    "default_hashtags": ["#ProductLaunch", "#AI", "#Innovation"],
+    "platforms": ["twitter", "linkedin"],
+    "is_public": false
+  }'
+```
+
+### Template Categories
+
+- `launch` - Product/feature launches
+- `feature_update` - Feature announcements
+- `customer_story` - Customer testimonials
+- `educational` - Tips and tutorials
+- `engagement` - Questions and polls
+- `promotional` - Sales and offers
+
+## Using Templates
+
+```bash
+curl -X POST http://localhost:5000/api/templates/1/use \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "variables": {
+      "product_name": "Voice Agent Builder",
+      "product_description": "Build AI voice agents in minutes",
+      "feature_list": "• No-code setup\n• Natural conversations\n• Multi-language support",
+      "link": "https://mindlap.ai/voice-agents"
+    }
+  }'
+```
+
+**Result:**
+```
+Excited to announce Voice Agent Builder! 🎉
+
+Build AI voice agents in minutes
+
+Key features:
+• No-code setup
+• Natural conversations
+• Multi-language support
+
+Learn more: https://mindlap.ai/voice-agents
+
+#ProductLaunch #AI
+```
+
+## Pre-built Mindlap Templates
+
+The system includes ready-to-use templates for Mindlap.ai:
+
+```bash
+# Seed Mindlap templates (admin only)
+curl -X POST http://localhost:5000/api/templates/seed/mindlap \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Included Templates:**
+- Product Launch Announcement
+- Feature Update
+- Customer Success Story
+- Weekly AI Tip
+- Behind the Scenes
+- Event Announcement
+
+## AI-Generated Templates
+
+Let AI create templates for you:
+
+```bash
+curl -X POST http://localhost:5000/api/ai/generate/template \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "templateType": "customer_story",
+    "industry": "technology",
+    "useCase": "voice AI implementation",
+    "audience": "business professionals",
+    "tone": "professional"
+  }'
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Posts" icon="pen" href="/user-guide/creating-posts">
+    Use templates to create posts
+  </Card>
+  <Card title="AI Generation" icon="sparkles" href="/user-guide/ai-content-generation">
+    Generate templates with AI
+  </Card>
+</CardGroup>

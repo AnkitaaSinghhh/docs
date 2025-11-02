@@ -1,0 +1,51 @@
+---
+title: "Hashtags API"
+description: "Hashtag suggestions and management"
+icon: "hashtag"
+---
+
+## Get Categories
+
+<api method="GET" path="/api/hashtags/categories" auth="bearer" />
+
+Get all available hashtag categories.
+
+## Get Trending
+
+<api method="GET" path="/api/hashtags/trending" auth="bearer" />
+
+Get currently trending hashtags.
+
+## Search Hashtags
+
+<api method="GET" path="/api/hashtags/search" auth="bearer" />
+
+Search for hashtags by keyword.
+
+### Query Parameters
+
+<ParamField query="keyword" type="string" required>
+  Search term
+</ParamField>
+
+## Get by Category
+
+<api method="GET" path="/api/hashtags/category/:category" auth="bearer" />
+
+## Suggest Hashtags
+
+<api method="POST" path="/api/hashtags/suggest" auth="bearer" />
+
+Get hashtag suggestions for specific content.
+
+## Analyze Hashtags
+
+<api method="POST" path="/api/hashtags/analyze" auth="bearer" />
+
+Analyze hashtag performance potential.
+
+## Generate Combinations
+
+<api method="POST" path="/api/hashtags/combinations" auth="bearer" />
+
+Generate optimized hashtag combinations.

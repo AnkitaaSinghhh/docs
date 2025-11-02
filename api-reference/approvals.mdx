@@ -1,0 +1,59 @@
+---
+title: "Approvals API"
+description: "Team collaboration and approval workflows"
+icon: "check-circle"
+---
+
+## Request Approval
+
+<api method="POST" path="/api/approvals/request" auth="bearer" />
+
+Submit a post for approval.
+
+### Request Body
+
+<ParamField path="post_id" type="number" required>
+  ID of the post to submit
+</ParamField>
+
+<ParamField path="request_message" type="string">
+  Optional message to reviewers
+</ParamField>
+
+## Get My Requests
+
+<api method="GET" path="/api/approvals/my-requests" auth="bearer" />
+
+Get all approval requests created by the authenticated user.
+
+## Get All Pending
+
+<api method="GET" path="/api/approvals" auth="bearer" />
+
+Get all pending approval requests (admin/editor only).
+
+## Get Approval Details
+
+<api method="GET" path="/api/approvals/:id" auth="bearer" />
+
+## Respond to Approval
+
+<api method="PUT" path="/api/approvals/:id/respond" auth="bearer" />
+
+Approve or reject an approval request (admin only).
+
+### Request Body
+
+<ParamField path="status" type="string" required>
+  Response: `approved` or `rejected`
+</ParamField>
+
+<ParamField path="response_message" type="string">
+  Feedback message
+</ParamField>
+
+## Cancel Request
+
+<api method="DELETE" path="/api/approvals/:id/cancel" auth="bearer" />
+
+Cancel your own approval request.

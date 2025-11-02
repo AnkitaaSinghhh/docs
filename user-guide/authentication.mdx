@@ -1,0 +1,343 @@
+---
+title: "Authentication"
+description: "User registration, login, and social media account setup"
+icon: "key"
+---
+
+## User Registration
+
+Create a new account to start using Mindlap Social Scheduler.
+
+### Register via API
+
+<CodeGroup>
+```bash cURL
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "SecurePassword123!",
+    "first_name": "John",
+    "last_name": "Doe"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:5000/api/auth/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'SecurePassword123!',
+    first_name: 'John',
+    last_name: 'Doe'
+  })
+});
+
+const data = await response.json();
+console.log(data.token); // JWT token
+```
+
+```python Python
+import requests
+
+response = requests.post('http://localhost:5000/api/auth/register', json={
+    'email': 'user@example.com',
+    'password': 'SecurePassword123!',
+    'first_name': 'John',
+    'last_name': 'Doe'
+})
+
+data = response.json()
+print(data['token'])  # JWT token
+```
+</CodeGroup>
+
+**Response:**
+```json
+{
+  "message": "User registered successfully",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "first_name": "John",
+    "last_name": "Doe",
+    "role": "editor"
+  }
+}
+```
+
+<Info>
+  New users are assigned the `editor` role by default, which allows creating and managing posts.
+</Info>
+
+## User Login
+
+Authenticate with your credentials to receive a JWT token.
+
+### Login via API
+
+<CodeGroup>
+```bash cURL
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "SecurePassword123!"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:5000/api/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'user@example.com',
+    password: 'SecurePassword123!'
+  })
+});
+
+const { token } = await response.json();
+localStorage.setItem('token', token);
+```
+</CodeGroup>
+
+**Response:**
+```json
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "role": "editor"
+  }
+}
+```
+
+## Using the JWT Token
+
+Include the JWT token in the `Authorization` header for all protected endpoints:
+
+```bash
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Example:**
+```bash
+curl -X GET http://localhost:5000/api/auth/profile \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+<Warning>
+  Tokens expire after 7 days (configurable via `JWT_EXPIRES_IN`). Users will need to login again after expiration.
+</Warning>
+
+## User Roles
+
+The system supports three role types with different permissions:
+
+<Tabs>
+  <Tab title="Admin">
+    ### Admin Role
+
+    **Permissions:**
+    - All editor permissions
+    - Approve/reject posts from other users
+    - Manage team members
+    - Access all analytics
+    - Seed templates for entire organization
+
+    **Use Case:** Team leads, content managers
+  </Tab>
+
+  <Tab title="Editor">
+    ### Editor Role
+
+    **Permissions:**
+    - Create, edit, and delete posts
+    - Schedule posts (single, recurring, bulk)
+    - Use and create templates
+    - Generate AI content
+    - View own analytics
+    - Request approvals
+
+    **Use Case:** Content creators, social media managers
+  </Tab>
+
+  <Tab title="Viewer">
+    ### Viewer Role
+
+    **Permissions:**
+    - View posts and schedules
+    - View analytics (read-only)
+    - Cannot create or modify content
+
+    **Use Case:** Stakeholders, observers
+  </Tab>
+</Tabs>
+
+## Manage Your Profile
+
+### View Profile
+
+```bash
+curl -X GET http://localhost:5000/api/auth/profile \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "id": 1,
+  "email": "user@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "role": "editor",
+  "is_active": true,
+  "preferences": {},
+  "created_at": "2024-01-15T10:30:00.000Z"
+}
+```
+
+### Update Profile
+
+```bash
+curl -X PUT http://localhost:5000/api/auth/profile \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Jane",
+    "preferences": {
+      "timezone": "America/New_York",
+      "default_platform": "twitter"
+    }
+  }'
+```
+
+### Change Password
+
+```bash
+curl -X PUT http://localhost:5000/api/auth/change-password \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "current_password": "OldPassword123!",
+    "new_password": "NewSecurePassword456!"
+  }'
+```
+
+## Connecting Social Media Accounts
+
+After authentication, connect your social media accounts to start publishing.
+
+<Note>
+  Social media account connection uses OAuth flows. You'll need to set up API credentials for each platform in your `.env` file.
+</Note>
+
+### Supported Platforms
+
+<CardGroup cols={2}>
+  <Card title="Twitter" icon="twitter">
+    Connect your Twitter account to publish tweets
+  </Card>
+  <Card title="LinkedIn" icon="linkedin">
+    Share professional content on LinkedIn
+  </Card>
+  <Card title="Instagram" icon="instagram">
+    Post photos and videos to Instagram
+  </Card>
+  <Card title="YouTube" icon="youtube">
+    Upload videos to YouTube
+  </Card>
+</CardGroup>
+
+### OAuth Flow
+
+1. **Initiate OAuth** - Request authorization URL from the platform
+2. **User Authorizes** - User grants permissions on the platform's site
+3. **Receive Tokens** - Platform returns access and refresh tokens
+4. **Store Credentials** - Tokens are securely stored in `social_accounts` table
+
+<Info>
+  The OAuth implementation is platform-specific. Refer to each platform's developer documentation for detailed setup instructions.
+</Info>
+
+## Security Best Practices
+
+<AccordionGroup>
+  <Accordion title="Password Requirements">
+    - Minimum 8 characters
+    - Mix of uppercase and lowercase letters
+    - Include numbers and special characters
+    - Passwords are hashed using bcrypt with 12 salt rounds
+  </Accordion>
+
+  <Accordion title="Token Security">
+    - Never expose JWT tokens in URLs or logs
+    - Store tokens securely (httpOnly cookies recommended for web apps)
+    - Implement token refresh mechanism for long-lived sessions
+    - Tokens expire after 7 days by default
+  </Accordion>
+
+  <Accordion title="Account Security">
+    - Enable two-factor authentication (if implemented)
+    - Regular password rotation
+    - Monitor login activity
+    - Revoke access for compromised accounts
+  </Accordion>
+
+  <Accordion title="API Credentials">
+    - Never commit `.env` files to version control
+    - Use environment-specific credentials
+    - Rotate API keys regularly
+    - Limit API key permissions to minimum required
+  </Accordion>
+</AccordionGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Invalid credentials">
+    **Error:** "Invalid email or password"
+
+    **Solutions:**
+    - Verify email and password are correct
+    - Check if account is active (`is_active` flag)
+    - Ensure password meets requirements
+  </Accordion>
+
+  <Accordion title="Token expired">
+    **Error:** "Token has expired"
+
+    **Solutions:**
+    - Login again to get a new token
+    - Implement automatic token refresh
+    - Check `JWT_EXPIRES_IN` configuration
+  </Accordion>
+
+  <Accordion title="Insufficient permissions">
+    **Error:** "Insufficient permissions"
+
+    **Solutions:**
+    - Check your user role (admin, editor, viewer)
+    - Request admin access if needed
+    - Verify the endpoint requires your role level
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Posts" icon="pen" href="/user-guide/creating-posts">
+    Start creating your first social media post
+  </Card>
+  <Card title="AI Content Generation" icon="sparkles" href="/user-guide/ai-content-generation">
+    Use AI to generate engaging content
+  </Card>
+</CardGroup>

@@ -1,0 +1,74 @@
+---
+title: "Posts API"
+description: "Create, manage, and publish social media posts"
+icon: "pen"
+---
+
+## Create Post
+
+<api method="POST" path="/api/posts" auth="bearer" />
+
+Create a new social media post.
+
+### Request Body
+
+<ParamField path="title" type="string">
+  Post title (internal reference)
+</ParamField>
+
+<ParamField path="content" type="string" required>
+  The post content
+</ParamField>
+
+<ParamField path="platforms" type="array" required>
+  Target platforms: `["twitter", "linkedin", "instagram", "youtube"]`
+</ParamField>
+
+<ParamField path="content_type" type="string" default="text">
+  Type: `text`, `image`, `video`, `link`, `audio`
+</ParamField>
+
+<ParamField path="hashtags" type="array">
+  Array of hashtags
+</ParamField>
+
+<ParamField path="scheduled_at" type="datetime">
+  When to publish (ISO 8601 format)
+</ParamField>
+
+### Example
+
+```bash
+curl -X POST http://localhost:5000/api/posts \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "Excited to announce our new AI feature!",
+    "platforms": ["twitter", "linkedin"],
+    "hashtags": ["#AI", "#VoiceAI"]
+  }'
+```
+
+## Get All Posts
+
+<api method="GET" path="/api/posts" auth="bearer" />
+
+Retrieve all posts for the authenticated user.
+
+## Get Single Post
+
+<api method="GET" path="/api/posts/:id" auth="bearer" />
+
+## Update Post
+
+<api method="PUT" path="/api/posts/:id" auth="bearer" />
+
+## Delete Post
+
+<api method="DELETE" path="/api/posts/:id" auth="bearer" />
+
+## Publish Immediately
+
+<api method="POST" path="/api/posts/:id/publish" auth="bearer" />
+
+Publish a post immediately to all configured platforms.

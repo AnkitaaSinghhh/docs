@@ -1,68 +1,72 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Mindlap Social Scheduler",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#7C3AED",
+    "light": "#A78BFA",
+    "dark": "#5B21B6"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "User Guide",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "user-guide/installation",
+              "user-guide/authentication"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Core Features",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "user-guide/creating-posts",
+              "user-guide/scheduling",
+              "user-guide/templates",
+              "user-guide/team-collaboration"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "AI Features",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "user-guide/ai-content-generation",
+              "user-guide/ai-optimization",
+              "user-guide/hashtag-suggestions"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Analytics",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "user-guide/analytics-overview",
+              "user-guide/performance-tracking"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Getting Started",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/introduction",
+              "api-reference/authentication"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Endpoints",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/posts",
+              "api-reference/schedules",
+              "api-reference/templates",
+              "api-reference/ai-endpoints",
+              "api-reference/hashtags",
+              "api-reference/analytics",
+              "api-reference/approvals"
             ]
           }
         ]
@@ -71,14 +75,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/AnkitaaSinghhh/MindlapSocialScheduler",
+          "icon": "github"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Mindlap.ai",
+          "href": "https://mindlap.ai",
+          "icon": "microphone"
         }
       ]
     }
@@ -91,13 +95,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@mindlap.ai"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Get Started",
+      "href": "/user-guide/installation"
     }
   },
   "contextual": {
@@ -114,9 +118,9 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/mindlapai",
+      "github": "https://github.com/AnkitaaSinghhh/MindlapSocialScheduler",
+      "linkedin": "https://linkedin.com/company/mindlap"
     }
   }
 }

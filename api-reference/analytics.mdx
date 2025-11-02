@@ -1,0 +1,57 @@
+---
+title: "Analytics API"
+description: "Performance tracking and insights"
+icon: "chart-line"
+---
+
+## Get Overview
+
+<api method="GET" path="/api/analytics/overview" auth="bearer" />
+
+Get comprehensive analytics overview.
+
+### Response
+
+```json
+{
+  "total_posts": 127,
+  "total_impressions": 45230,
+  "total_engagement": 3421,
+  "engagement_rate": 7.56,
+  "top_platform": "linkedin",
+  "platform_breakdown": {
+    "twitter": { "posts": 45, "engagement": 1234 },
+    "linkedin": { "posts": 52, "engagement": 1876 }
+  }
+}
+```
+
+## Get Post Analytics
+
+<api method="GET" path="/api/analytics/posts" auth="bearer" />
+
+Get performance data for individual posts.
+
+## Get Trends
+
+<api method="GET" path="/api/analytics/trends" auth="bearer" />
+
+Analyze engagement trends over time.
+
+### Query Parameters
+
+<ParamField query="period" type="string" default="30d">
+  Time period: `7d`, `30d`, `90d`
+</ParamField>
+
+## Get Best Times
+
+<api method="GET" path="/api/analytics/best-times" auth="bearer" />
+
+Discover optimal posting times based on historical data.
+
+## Refresh Analytics
+
+<api method="POST" path="/api/analytics/refresh/:post_id" auth="bearer" />
+
+Manually refresh analytics for a specific post.

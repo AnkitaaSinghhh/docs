@@ -1,0 +1,384 @@
+---
+title: "AI Content Generation"
+description: "Use AI to create engaging social media posts automatically"
+icon: "wand-magic-sparkles"
+---
+
+## Overview
+
+Mindlap Social Scheduler uses OpenAI's GPT-4o-mini model to help you create compelling social media content. From generating posts from simple prompts to improving existing content, AI can save time and boost engagement.
+
+## Generate a Post from a Prompt
+
+Create a complete social media post from a simple idea.
+
+<CodeGroup>
+```bash cURL
+curl -X POST http://localhost:5000/api/ai/generate/post \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "Announce our new AI-powered customer service feature",
+    "platform": "linkedin",
+    "tone": "professional",
+    "audience": "business professionals",
+    "contentType": "promotional",
+    "includeHashtags": true,
+    "maxLength": 300
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:5000/api/ai/generate/post', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    prompt: 'Announce our new AI-powered customer service feature',
+    platform: 'linkedin',
+    tone: 'professional',
+    audience: 'business professionals',
+    contentType: 'promotional',
+    includeHashtags: true,
+    maxLength: 300
+  })
+});
+
+const { content, hashtags } = await response.json();
+```
+</CodeGroup>
+
+**Response:**
+```json
+{
+  "content": "Revolutionize your customer support with Mindlap's latest AI-powered voice agents! 🚀\n\nOur new feature enables businesses to handle customer inquiries 24/7 with intelligent, natural-sounding voice interactions. No coding required.\n\nKey benefits:\n✅ Reduce response times by 80%\n✅ Cut support costs significantly\n✅ Improve customer satisfaction\n\nReady to transform your customer service? Learn more at mindlap.ai",
+  "hashtags": ["#AI", "#CustomerService", "#VoiceAI", "#BusinessAutomation"],
+  "characterCount": 289,
+  "platform": "linkedin",
+  "tone": "professional"
+}
+```
+
+### Generation Parameters
+
+<ParamField path="prompt" type="string" required>
+  Your content idea or topic
+</ParamField>
+
+<ParamField path="platform" type="string" default="twitter">
+  Target platform: `twitter`, `linkedin`, `instagram`, `youtube`
+</ParamField>
+
+<ParamField path="tone" type="string" default="professional">
+  Writing style: `professional`, `casual`, `friendly`, `enthusiastic`, `humorous`, `informative`
+</ParamField>
+
+<ParamField path="audience" type="string">
+  Target audience description (e.g., "business professionals", "developers", "marketing managers")
+</ParamField>
+
+<ParamField path="contentType" type="string" default="general">
+  Content category: `general`, `educational`, `promotional`, `engagement`, `announcement`
+</ParamField>
+
+<ParamField path="includeHashtags" type="boolean" default="true">
+  Whether to include relevant hashtags
+</ParamField>
+
+<ParamField path="maxLength" type="number">
+  Maximum character count (respects platform limits)
+</ParamField>
+
+## Improve Existing Content
+
+Enhance your existing posts for better engagement.
+
+```bash
+curl -X POST http://localhost:5000/api/ai/improve/content \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "originalContent": "We have a new feature. Check it out.",
+    "platform": "twitter",
+    "improvements": ["engagement", "clarity", "cta"]
+  }'
+```
+
+**Response:**
+```json
+{
+  "original": "We have a new feature. Check it out.",
+  "improved": "Exciting news! 🎉 We just launched an AI-powered voice agent builder that lets you create custom voice assistants in minutes—no coding needed!\n\nTry it free today 👉 mindlap.ai/demo\n\n#AI #VoiceAI #NoCode",
+  "improvements_applied": ["engagement", "clarity", "cta"],
+  "character_change": +142,
+  "platform": "twitter"
+}
+```
+
+### Improvement Types
+
+<AccordionGroup>
+  <Accordion title="engagement">
+    Makes content more engaging and attention-grabbing
+    - Adds emojis and formatting
+    - Uses active voice
+    - Creates curiosity
+    - Includes compelling hooks
+  </Accordion>
+
+  <Accordion title="clarity">
+    Improves clarity and conciseness
+    - Removes jargon
+    - Simplifies complex ideas
+    - Shortens sentences
+    - Enhances readability
+  </Accordion>
+
+  <Accordion title="cta">
+    Strengthens call-to-action
+    - Adds clear next steps
+    - Includes action verbs
+    - Creates urgency
+    - Links to resources
+  </Accordion>
+
+  <Accordion title="tone">
+    Adjusts tone appropriately
+    - Matches platform expectations
+    - Aligns with brand voice
+    - Adapts to audience
+  </Accordion>
+
+  <Accordion title="seo">
+    Optimizes for search and discovery
+    - Includes relevant keywords
+    - Adds strategic hashtags
+    - Improves discoverability
+  </Accordion>
+</AccordionGroup>
+
+## Generate Bulk Posts
+
+Create multiple posts for a campaign in one request.
+
+```bash
+curl -X POST http://localhost:5000/api/ai/generate/bulk-posts \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "campaign_theme": "Mindlap product launch week",
+    "platforms": ["twitter", "linkedin"],
+    "post_count": 5,
+    "content_types": ["educational", "promotional", "engagement"],
+    "tone": "professional",
+    "audience": "tech entrepreneurs and business owners"
+  }'
+```
+
+**Response:**
+```json
+{
+  "posts": [
+    {
+      "content": "Day 1 of Mindlap Launch Week! 🚀...",
+      "hashtags": ["#AI", "#VoiceAI", "#LaunchWeek"],
+      "characterCount": 245,
+      "platform": "twitter",
+      "contentType": "engagement"
+    },
+    {
+      "content": "Learn how voice AI can transform...",
+      "hashtags": ["#VoiceAI", "#Tutorial"],
+      "characterCount": 312,
+      "platform": "linkedin",
+      "contentType": "educational"
+    }
+    // ... 3 more posts
+  ],
+  "total_posts": 5,
+  "campaign_theme": "Mindlap product launch week"
+}
+```
+
+<Tip>
+  Bulk generation is perfect for planning week-long campaigns, product launches, or content calendars.
+</Tip>
+
+## Smart Scheduling with AI
+
+Get AI recommendations for the best times to post.
+
+```bash
+curl -X POST http://localhost:5000/api/ai/optimize/scheduling \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contentType": "educational",
+    "platforms": ["linkedin", "twitter"],
+    "audience": "business professionals",
+    "timezone": "America/New_York",
+    "priority": "high"
+  }'
+```
+
+**Response:**
+```json
+{
+  "recommendation": "For business professionals on LinkedIn and Twitter, optimal posting times are weekday mornings (9-10 AM) and lunch hours (12-1 PM) EST when engagement is highest.",
+  "optimal_times": ["9:00 AM", "12:00 PM", "5:00 PM"],
+  "best_days": ["tuesday", "wednesday", "thursday"],
+  "frequency": "3_times_week",
+  "platforms": ["linkedin", "twitter"],
+  "timezone": "America/New_York"
+}
+```
+
+### Then Schedule Posts at Optimal Times
+
+```bash
+curl -X POST http://localhost:5000/api/ai/smart-schedule \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "posts": [
+      {
+        "content": "Post 1 content...",
+        "platforms": ["linkedin"]
+      },
+      {
+        "content": "Post 2 content...",
+        "platforms": ["twitter"]
+      }
+    ],
+    "audience": "business professionals",
+    "timezone": "America/New_York"
+  }'
+```
+
+The AI will automatically distribute your posts across optimal times.
+
+## AI-Powered Features
+
+<CardGroup cols={2}>
+  <Card title="Post Generation" icon="pen-fancy">
+    Create complete posts from simple prompts
+  </Card>
+  <Card title="Content Improvement" icon="arrow-up">
+    Enhance existing content for better results
+  </Card>
+  <Card title="Bulk Generation" icon="layer-group">
+    Generate multiple posts for campaigns
+  </Card>
+  <Card title="Smart Scheduling" icon="calendar-star">
+    AI-optimized posting times
+  </Card>
+  <Card title="Template Creation" icon="file-plus">
+    Generate reusable templates
+  </Card>
+  <Card title="Hashtag Suggestions" icon="hashtag">
+    Intelligent hashtag recommendations
+  </Card>
+</CardGroup>
+
+## Best Practices for AI Generation
+
+<Steps>
+  <Step title="Be Specific in Prompts">
+    Better: "Announce our new AI customer service feature that reduces response times by 80%"
+
+    Worse: "New feature announcement"
+  </Step>
+
+  <Step title="Define Your Audience">
+    Specify who you're targeting:
+    - "C-suite executives in tech"
+    - "Small business owners"
+    - "Developers and engineers"
+  </Step>
+
+  <Step title="Choose the Right Tone">
+    Match your brand personality:
+    - Professional for B2B LinkedIn
+    - Casual for Twitter engagement
+    - Friendly for customer support
+  </Step>
+
+  <Step title="Review and Edit">
+    AI-generated content is a starting point:
+    - Add personal touches
+    - Verify facts and claims
+    - Ensure brand alignment
+    - Check for errors
+  </Step>
+
+  <Step title="Test Different Variations">
+    Generate multiple versions and A/B test:
+    - Try different tones
+    - Experiment with lengths
+    - Test various hashtags
+  </Step>
+</Steps>
+
+## Cost Considerations
+
+<Info>
+  AI features use OpenAI's API, which has usage costs. Monitor your API usage in the OpenAI dashboard.
+</Info>
+
+**Typical Costs:**
+- Single post generation: ~200-400 tokens (~$0.001-0.002)
+- Content improvement: ~300-500 tokens (~$0.001-0.003)
+- Bulk generation (5 posts): ~1,000-2,000 tokens (~$0.005-0.010)
+- Template generation: ~400-600 tokens (~$0.002-0.003)
+
+Model: **gpt-4o-mini** (cost-effective option)
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="AI generation failed">
+    **Error:** "Failed to generate content"
+
+    **Solutions:**
+    - Verify OpenAI API key is valid
+    - Check API credit balance
+    - Test connection: `node test_openai.js`
+    - Review OpenAI API status
+  </Accordion>
+
+  <Accordion title="Generated content is too short/long">
+    **Issue:** Content doesn't meet expectations
+
+    **Solutions:**
+    - Adjust `maxLength` parameter
+    - Be more specific in prompt
+    - Try different `contentType` values
+    - Regenerate with modified parameters
+  </Accordion>
+
+  <Accordion title="Inappropriate content generated">
+    **Issue:** AI generated off-brand content
+
+    **Solutions:**
+    - Provide more context in prompt
+    - Specify tone and audience clearly
+    - Use content improvement to refine
+    - Add brand guidelines to prompt
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Hashtag Suggestions" icon="hashtag" href="/user-guide/hashtag-suggestions">
+    Get AI-powered hashtag recommendations
+  </Card>
+  <Card title="Content Templates" icon="file-lines" href="/user-guide/templates">
+    Create reusable AI-generated templates
+  </Card>
+  <Card title="Schedule Posts" icon="calendar" href="/user-guide/scheduling">
+    Schedule your AI-generated content
+  </Card>
+</CardGroup>

@@ -1,0 +1,65 @@
+---
+title: "Templates API"
+description: "Manage reusable content templates"
+icon: "file-lines"
+---
+
+## Create Template
+
+<api method="POST" path="/api/templates" auth="bearer" />
+
+### Request Body
+
+<ParamField path="name" type="string" required>
+  Template name
+</ParamField>
+
+<ParamField path="content_template" type="string" required>
+  Template content with {{variables}}
+</ParamField>
+
+<ParamField path="category" type="string">
+  Category: `launch`, `feature_update`, `customer_story`, etc.
+</ParamField>
+
+<ParamField path="default_hashtags" type="array">
+  Default hashtags for this template
+</ParamField>
+
+<ParamField path="platforms" type="array">
+  Recommended platforms
+</ParamField>
+
+<ParamField path="is_public" type="boolean" default="false">
+  Make template available to all users
+</ParamField>
+
+## Get All Templates
+
+<api method="GET" path="/api/templates" auth="bearer" />
+
+## Use Template
+
+<api method="POST" path="/api/templates/:id/use" auth="bearer" />
+
+Apply a template with variable substitution.
+
+```bash
+curl -X POST http://localhost:5000/api/templates/1/use \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "variables": {
+      "product_name": "Voice Agent Builder",
+      "link": "https://mindlap.ai"
+    }
+  }'
+```
+
+## Update Template
+
+<api method="PUT" path="/api/templates/:id" auth="bearer" />
+
+## Delete Template
+
+<api method="DELETE" path="/api/templates/:id" auth="bearer" />

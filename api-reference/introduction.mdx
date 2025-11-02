@@ -1,33 +1,138 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "API Introduction"
+description: "Getting started with the Mindlap Social Scheduler API"
+icon: "code"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Welcome to the API
 
-## Welcome
+The Mindlap Social Scheduler API is a RESTful API that allows you to programmatically manage social media content, scheduling, and analytics.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+```
+http://localhost:5000/api
+```
+
+For production, replace with your deployment URL.
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API endpoints (except `/auth/register` and `/auth/login`) require authentication using JWT tokens.
+
+### Get a Token
+
+```bash
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "yourpassword"
+  }'
+```
+
+### Use the Token
+
+Include the JWT token in the `Authorization` header:
+
+```bash
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## API Endpoints Overview
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
+    Register, login, and manage user profiles
+  </Card>
+  <Card title="Posts" icon="pen" href="/api-reference/posts">
+    Create, update, and manage posts
+  </Card>
+  <Card title="Schedules" icon="calendar" href="/api-reference/schedules">
+    Schedule posts for automatic publishing
+  </Card>
+  <Card title="Templates" icon="file-lines" href="/api-reference/templates">
+    Manage reusable content templates
+  </Card>
+  <Card title="AI Endpoints" icon="sparkles" href="/api-reference/ai-endpoints">
+    AI-powered content generation and optimization
+  </Card>
+  <Card title="Hashtags" icon="hashtag" href="/api-reference/hashtags">
+    Hashtag suggestions and management
+  </Card>
+  <Card title="Analytics" icon="chart-line" href="/api-reference/analytics">
+    Performance tracking and insights
+  </Card>
+  <Card title="Approvals" icon="check-circle" href="/api-reference/approvals">
+    Team collaboration and approval workflows
+  </Card>
+</CardGroup>
+
+## Rate Limiting
+
+<Info>
+  Currently, there are no rate limits implemented. For production use, consider implementing rate limiting.
+</Info>
+
+## Response Format
+
+All responses are in JSON format.
+
+### Success Response
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+{
+  "success": true,
+  "data": { ... }
+}
 ```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "error": "Error message",
+  "details": { ... }
+}
+```
+
+## HTTP Status Codes
+
+| Code | Meaning |
+|------|---------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Bad Request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not Found |
+| 500 | Internal Server Error |
+
+## SDKs and Libraries
+
+Currently, the API is accessible via HTTP requests. SDKs for popular languages coming soon.
+
+## Support
+
+- **GitHub**: [MindlapSocialScheduler](https://github.com/AnkitaaSinghhh/MindlapSocialScheduler)
+- **Email**: support@mindlap.ai
+
+## API Reference
+
+Explore detailed documentation for each endpoint:
+
+<Steps>
+  <Step title="Authentication">
+    Learn about user registration, login, and profile management
+  </Step>
+  <Step title="Core Features">
+    Explore posts, scheduling, and templates
+  </Step>
+  <Step title="AI Features">
+    Discover AI-powered content generation and optimization
+  </Step>
+  <Step title="Analytics">
+    Track performance and gain insights
+  </Step>
+</Steps>
